@@ -35,12 +35,14 @@ window.addEventListener("load", function () {
          alert("All fields are required!");
          launchStatus.style.color = "black";
          launchStatus.innerHTML = "Awaiting Information Before Launch";
+         faultyItems.style.visibility = "hidden";
          event.preventDefault();
       } else if (!isNaN(pilotNameInput.value) || !isNaN(copilotNameInput.value) || isNaN(fuelLevel.value) || isNaN(cargoWeight.value)) {
          invalidInputs = true;
          alert("Make sure to enter valid information for each field!");
          launchStatus.style.color = "black";
          launchStatus.innerHTML = "Awaiting Information Before Launch";
+         faultyItems.style.visibility = "hidden";
          event.preventDefault();
       } else if (fuelLevel.value <= 10000 || cargoWeight.value >= 10000) {
          fetchReady = false;
