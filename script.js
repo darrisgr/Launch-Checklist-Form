@@ -21,8 +21,6 @@ window.addEventListener("load", function () {
 window.addEventListener("load", function () {
    let button = document.getElementById("formSubmit");
    let fetchReady = false;
-   let notEnoughInputs = false;
-   let invalidInputs = false;
 
    button.addEventListener("click", function (event) {
       let pilotNameInput = document.querySelector("input[name=pilotName]");
@@ -37,7 +35,6 @@ window.addEventListener("load", function () {
       let cargoStatus = document.getElementById("cargoStatus");
 
       if (pilotNameInput.value === "" || copilotNameInput.value === "" || fuelLevel.value === "" || cargoWeight.value === "") {
-         notEnoughInputs = true;
          alert("All fields are required!");
          launchStatus.style.color = "black";
          launchStatus.innerHTML = "Awaiting Information Before Launch";
@@ -52,52 +49,30 @@ window.addEventListener("load", function () {
          event.preventDefault();
       } else if (fuelLevel.value <= 10000 || cargoWeight.value >= 10000) {
          fetchReady = false;
-         notEnoughInputs = false;
          invalidInputs = false;
          launchStatus.innerHTML = "Shuttle Not Ready for Launch";
          launchStatus.style.color = "red";
          faultyItems.style.visibility = "visible";
          pilotStatus.innerHTML = `Pilot ${pilotNameInput.value} is ready for launch.`;
          copilotStatus.innerHTML = `Co-pilot ${copilotNameInput.value} is ready for launch.`;
-         fuelStatus.innerHTML = "Fuel level high enough for launch";
-         cargoStatus.innerHTML = "Cargo weight low enough for launch";
 
-         if (fuelLevel.value <= 10000) {
+         if (fuelLevel.value <= 10000 && cargoWeight.value >= 10000){
             fuelStatus.innerHTML = "Fuel level too low for launch";
+            cargoStatus.innerHTML = "Cargo weight too high for launch";
+         } else if (fuelLevel.value <= 10000) {
+            fuelStatus.innerHTML = "Fuel level too low for launch";
+            cargoStatus.innerHTML = "Cargo weight low enough for launch";
          } else if (cargoWeight.value >= 10000) {
+            fuelStatus.innerHTML = "Fuel level high enough for launch";
             cargoStatus.innerHTML = "Cargo weight too high for launch";
          };
          event.preventDefault();
       } else {
          fetchReady = true;
-         notEnoughInputs = false;
-         invalidInputs = false;
          faultyItems.style.visibility = "hidden";
          launchStatus.style.color = "green";
          launchStatus.innerHTML = "Shuttle Is Ready for Launch";
          event.preventDefault();
-      };
-   });
-
-   button.addEventListener("click", function () {
-      let missionTarget = document.getElementById("missionTarget");
-      let indexVal = Math.floor(Math.random() * 6);
-      if (fetchReady && !notEnoughInputs && !invalidInputs) {
-         fetch("https://handlers.education.launchcode.org/static/planets.json").then(function (response) {
-            response.json().then(function (json) {
-               missionTarget.innerHTML = `
-                  <h2>Mission Destination</h2>
-                  <ol>
-                     <li>Name: ${json[indexVal].name}</li>
-                     <li>Diameter: ${json[indexVal].diameter}</li>
-                     <li>Star: ${json[indexVal].star}</li>
-                     <li>Distance from Earth: ${json[indexVal].distance}</li>
-                     <li>Number of Moons: ${json[indexVal].moons}</li>
-                  </ol>
-                  <img src="${json[indexVal].image}">
-                  `;
-            });
-         });
       };
    });
 });
