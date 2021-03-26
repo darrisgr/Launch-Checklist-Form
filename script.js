@@ -1,8 +1,8 @@
 window.addEventListener("load", function () {
    let missionTarget = document.getElementById("missionTarget");
-   let indexVal = Math.floor(Math.random() * 6);
    fetch("https://handlers.education.launchcode.org/static/planets.json").then(function (response) {
       response.json().then(function (json) {
+         let indexVal = Math.floor(Math.random() * json.length);
          missionTarget.innerHTML = `
                <h2>Mission Destination</h2>
                <ol>
@@ -25,12 +25,16 @@ window.addEventListener("load", function () {
    button.addEventListener("click", function (event) {
       let pilotNameInput = document.querySelector("input[name=pilotName]");
       let copilotNameInput = document.querySelector("input[name=copilotName]");
+
       let fuelLevel = document.querySelector("input[name=fuelLevel]");
       let cargoWeight = document.querySelector("input[name=cargoWeight]");
+
       let launchStatus = document.getElementById("launchStatus");
       let faultyItems = document.getElementById("faultyItems");
+
       let pilotStatus = document.getElementById("pilotStatus");
       let copilotStatus = document.getElementById("copilotStatus");
+      
       let fuelStatus = document.getElementById("fuelStatus");
       let cargoStatus = document.getElementById("cargoStatus");
 
@@ -42,6 +46,7 @@ window.addEventListener("load", function () {
          faultyItems.style.visibility = "hidden";
       } else if (!isNaN(pilotNameInput.value) || !isNaN(copilotNameInput.value) || isNaN(fuelLevel.value) || isNaN(cargoWeight.value)) {
          invalidInputs = true;
+         console.log(typeof pilotNameInput.value)
          alert("Make sure to enter valid information for each field!");
          launchStatus.style.color = "black";
          launchStatus.innerHTML = "Awaiting Information Before Launch";
